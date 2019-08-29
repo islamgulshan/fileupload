@@ -5,7 +5,7 @@
 ## Fil Upload and save to db
   
 
-#### URL For access 
+# userPhoto file type with postman  
 
 
 root
