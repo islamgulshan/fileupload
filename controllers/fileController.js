@@ -17,10 +17,14 @@ const photo =(req,res)=>{
 		if(err){
 			return res.end("Error uploads file.");
 		}
-		 var imge=req.filename;
+		//console.log(req);
+		  var imge=req. file.filename;
+		 //console.log(req);
 		 let Newfile = new fileschma();
 		Newfile.photo= imge;
 		Newfile.save();
+		return res.end("uploads file");
+
 
 	})
 	
@@ -34,10 +38,15 @@ const galary =(req,res)=>{
 			res.send(err);
 		}
 		else{
-			res.status(200).json({
-				message: "data get successfully",
-				galryinfo
-			})
+			
+			
+			//res.sendFile(path.join(__dirname, "/../index.html"));
+			//res.render('/index', { photos: galryinfo});
+
+		 
+
+			
+			 
 		}
 		
 	

@@ -5,6 +5,12 @@ var bodyParser = require("body-parser");
 var cors = require("cors");
 var path = require("path");
 var multer = require("multer");
+var jwt= require("jsonwebtoken");
+
+
+
+
+
 
 mongoose.connection.openUri('mongodb://localhost:27017/fileupload', { useNewUrlParser:true});
 mongoose.connection.on('connected',()=>{
@@ -20,8 +26,6 @@ mongoose.connection.on('error',(err)=>{
  var multer = require("multer");
 
 var app=express();
-
-
 
 var router =require('./route/index');
 
@@ -47,15 +51,22 @@ app.use('/api',router);
  
 
 
+var storage=multer.diskStorage({
+	destination: function (req,file,callback){
+		callback(null,'./uploads');
+	},
+	filename: function (req,file,callback){
+		callback(null,file.fieldname+'_'+Date.now()+".jpg");
+	},
+})
 
-
+var upload= multer({storage:storage}).single('userPhoto');
 
 
 app.get('/', (req,res)=>{
 	res.sendFile(__dirname+"/index.html");
 	
 });
-
 
 
 
@@ -74,5 +85,30 @@ app.get('/', (req,res)=>{
 app.listen(4000, () => {
   console.log(`listening on port `);
 });
+
+
+// varify token
+function varifyToken(req,res,next){
+	const bearHeader= req.headers['authorization'];
+	// check if bearer is undefined 
+	if (typeof bearHeader !='undefined'){
+		//splite at a space
+		const bearer=bearHeader.split(' ');
+		//get token from array
+		const bearerToken=bearer[1];
+		//ret token
+		req.token= bearerToken;
+		// next middleware
+		jwt.varifyToken(req.token,'secretkey', (err,auData) => {
+			if(err){
+				res.status(403).send(err);
+				//res.sendStatus(403);
+			}else{
+				req.auData=auData;
+				next();
+			}
+		});
+	}	
+}
 
 
