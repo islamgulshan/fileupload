@@ -23,9 +23,12 @@ mongoose.connection.on('error',(err)=>{
 	}
 })
 
- var multer = require("multer");
+var multer = require("multer");
 
 var app=express();
+
+ 
+app.set('view engine', 'ejs');
 
 var router =require('./route/index');
 
@@ -42,14 +45,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // serving static content
 app.use(express.static(path.join(__dirname, "public")));
+
+app.use(express.static(path.join(__dirname, "uploads")));
+
 app.use('/api',router);
-
-
- 
-
-
- 
-
 
 var storage=multer.diskStorage({
 	destination: function (req,file,callback){
@@ -64,7 +63,7 @@ var upload= multer({storage:storage}).single('userPhoto');
 
 
 app.get('/', (req,res)=>{
-	res.sendFile(__dirname+"/index.html");
+	 res.sendFile(__dirname+"/index.html");
 	
 });
 

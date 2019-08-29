@@ -32,16 +32,15 @@ const photo =(req,res)=>{
 }
 	
 const galary =(req,res)=>{
-
+ 
 	fileschma.find( (err,galryinfo) =>{
 		if(err){
 			res.send(err);
 		}
 		else{
 			
-			
-			//res.sendFile(path.join(__dirname, "/../index.html"));
-			//res.render('/index', { photos: galryinfo});
+			// res.send(galryinfo);
+			 res.render('galary.ejs', { photos: galryinfo});
 
 		 
 
